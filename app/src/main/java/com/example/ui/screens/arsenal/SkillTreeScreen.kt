@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.entity.SkillTreeNodeEntity
@@ -330,7 +331,78 @@ fun SkillTreeScreen(
                     }
 
                     3 -> {
-                        // 4. PRIVACY & LOCAL ARCHITECTURE TAB
+                        // 4. PRIVACY & LOCAL ARCHITECTURE & ADMIN TAB
+                        item {
+                            SystemSectionHeader(
+                                title = "VERIFIED SYSTEM ADMIN AUTHORITY",
+                                subtitle = "Shadow Monarch Creator Console",
+                                icon = Icons.Default.WorkspacePremium
+                            )
+                        }
+
+                        item {
+                            GlassCard(
+                                modifier = Modifier.fillMaxWidth(),
+                                borderColor = LevelUpGold,
+                                borderWidth = 1.5.dp,
+                                backgroundColor = Color(0xFF1E1033)
+                            ) {
+                                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Column {
+                                            Text(
+                                                text = "👑 ${profile?.hunterName ?: "Abhiron (Admin)"}",
+                                                style = Typography.titleMedium.copy(fontWeight = FontWeight.Black),
+                                                color = LevelUpGold
+                                            )
+                                            Text(
+                                                text = "Email: ${profile?.userEmail ?: "sabhiron5@gmail.com"}",
+                                                style = Typography.labelSmall,
+                                                color = Color(0xFFE8D0FF)
+                                            )
+                                        }
+
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(6.dp))
+                                                .background(LevelUpGold)
+                                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                        ) {
+                                            Text("GOD MODE", style = Typography.labelSmall.copy(fontWeight = FontWeight.Black, color = BackgroundVoid))
+                                        }
+                                    }
+
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Text("• Account Tier: SYSTEM_ADMIN (Monarch VIP Unlimited)", style = Typography.bodyMedium, color = HealthGreen)
+                                    Text("• Access Level: Unrestricted Root Privileges", style = Typography.bodyMedium, color = TextPrimary)
+                                    Text("• Camera AI Bypass: Enabled (100% Verification Rate)", style = Typography.bodyMedium, color = NeonCyan)
+                                    Text("• Unlimited Skill Tree Unlocks: Active", style = Typography.bodyMedium, color = LevelUpGold)
+
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Button(
+                                            onClick = { viewModel.adminInstantLevelUp(5) },
+                                            colors = ButtonDefaults.buttonColors(containerColor = LevelUpGold, contentColor = BackgroundVoid),
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text("+5 LEVELS", style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold))
+                                        }
+                                        Button(
+                                            onClick = { viewModel.setAdminAuthority("Abhiron (Admin)", "sabhiron5@gmail.com", true) },
+                                            colors = ButtonDefaults.buttonColors(containerColor = MonarchPurple, contentColor = Color.White),
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text("SYNC ADMIN", style = Typography.labelSmall)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         item {
                             SystemSectionHeader(
                                 title = "LOCAL-FIRST PRIVACY ENGINE",

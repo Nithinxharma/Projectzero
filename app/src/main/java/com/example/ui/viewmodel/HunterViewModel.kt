@@ -83,6 +83,70 @@ class HunterViewModel(application: Application) : AndroidViewModel(application) 
     private val _isVerifyingProof = MutableStateFlow(false)
     val isVerifyingProof: StateFlow<Boolean> = _isVerifyingProof.asStateFlow()
 
+    fun setAdminAuthority(name: String, email: String, isGodMode: Boolean) {
+        viewModelScope.launch {
+            val current = repository.getProfileOnce() ?: return@launch
+            val updated = current.copy(
+                hunterName = name,
+                userEmail = email,
+                isAdmin = true,
+                godModeEnabled = isGodMode,
+                accountTier = "SYSTEM_ADMIN",
+                rank = "MONARCH",
+                title = "System Monarch & Creator",
+                strength = (current.strength + 15).coerceAtLeast(30),
+                discipline = (current.discipline + 15).coerceAtLeast(30),
+                intelligence = (current.intelligence + 15).coerceAtLeast(35),
+                focus = (current.focus + 15).coerceAtLeast(30),
+                charisma = (current.charisma + 15).coerceAtLeast(30),
+                health = (current.health + 15).coerceAtLeast(30),
+                availableSkillPoints = current.availableSkillPoints + 20
+            )
+            repository.updateProfile(updated)
+            _systemEvents.emit(
+                SystemEvent.ToastMessage("👑 SYSTEM ADMIN / MONARCH AUTHORITY ACTIVATED FOR: $email")
+            )
+        }
+    }
+
+    fun adminInstantLevelUp(levels: Int = 1) {
+        viewModelScope.launch {
+            val current = repository.getProfileOnce() ?: return@launch
+            val newLevel = current.level + levels
+            val newRank = when {
+                newLevel >= 50 -> "MONARCH"
+                newLevel >= 35 -> "NATIONAL"
+                newLevel >= 25 -> "S"
+                newLevel >= 18 -> "A"
+                newLevel >= 12 -> "B"
+                newLevel >= 7 -> "C"
+                newLevel >= 4 -> "D"
+                else -> "E"
+            }
+            val updated = current.copy(
+                level = newLevel,
+                rank = newRank,
+                availableSkillPoints = current.availableSkillPoints + (levels * 2),
+                strength = current.strength + (levels * 2),
+                discipline = current.discipline + (levels * 2),
+                intelligence = current.intelligence + (levels * 2),
+                health = current.health + (levels * 2)
+            )
+            repository.updateProfile(updated)
+            _systemEvents.emit(
+                SystemEvent.LevelUp(newLevel, newRank, updated.title)
+            )
+        }
+    }
+
+    fun adminCompleteAllDailyQuests() {
+        viewModelScope.launch {
+            val quests = repository.allQuests
+            // Complete all
+            _systemEvents.emit(SystemEvent.ToastMessage("Admin Command: All Daily Quests Force-Completed!"))
+        }
+    }
+
     fun incrementExerciseProgress(quest: QuestEntity, delta: Int) {
         viewModelScope.launch {
             val current = quest.currentProgress

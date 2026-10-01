@@ -58,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.entity.QuestEntity
+import com.example.ui.components.AdminCommandCenterModal
 import com.example.ui.components.BossHpBar
 import com.example.ui.components.CameraProofScanner
 import com.example.ui.components.EditTargetLimitDialog
@@ -101,6 +102,7 @@ fun HunterHudScreen(
     var activeProofQuest by remember { mutableStateOf<QuestEntity?>(null) }
     var editingLimitQuest by remember { mutableStateOf<QuestEntity?>(null) }
     var showUrgeDeflectorModal by remember { mutableStateOf(false) }
+    var showAdminModal by remember { mutableStateOf(false) }
 
     val dailyCountableQuests = allQuests.filter { it.category == "DAILY" }
     val activeBoss = bossRaids.firstOrNull { !it.isCompleted }
@@ -116,6 +118,53 @@ fun HunterHudScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 90.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // ADMIN / SYSTEM CREATOR STATUS BAR
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(Color(0xFF3B007A), Color(0xFF6B0024), Color(0xFF003853))
+                            )
+                        )
+                        .border(1.dp, LevelUpGold, RoundedCornerShape(8.dp))
+                        .clickable { showAdminModal = true }
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .testTag("admin_status_bar")
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "👑 SYSTEM ADMIN : sabhiron5@gmail.com",
+                                style = Typography.labelSmall.copy(fontWeight = FontWeight.Black),
+                                color = LevelUpGold
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(3.dp))
+                                    .background(HealthGreen.copy(alpha = 0.25f))
+                                    .padding(horizontal = 4.dp, vertical = 1.dp)
+                            ) {
+                                Text("GOD MODE", style = Typography.labelSmall.copy(fontSize = 8.sp, color = HealthGreen))
+                            }
+                        }
+
+                        Text(
+                            text = "COMMANDS ⚙",
+                            style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            color = NeonCyan
+                        )
+                    }
+                }
+            }
+
             // 1. HUNTER PROFILE & RANK STATUS HUD
             item {
                 profile?.let { p ->
@@ -123,7 +172,7 @@ fun HunterHudScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("hunter_hud_card"),
-                        borderColor = NeonCyan.copy(alpha = 0.5f),
+                        borderColor = if (p.isAdmin) LevelUpGold.copy(alpha = 0.7f) else NeonCyan.copy(alpha = 0.5f),
                         borderWidth = 1.5.dp
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
@@ -139,15 +188,15 @@ fun HunterHudScreen(
                                             .clip(CircleShape)
                                             .background(
                                                 Brush.radialGradient(
-                                                    listOf(NeonCyan, MonarchPurple)
+                                                    listOf(LevelUpGold, MonarchPurple)
                                                 )
                                             )
-                                            .border(2.dp, NeonCyan, CircleShape),
+                                            .border(2.dp, LevelUpGold, CircleShape),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = "0",
-                                            style = Typography.headlineMedium.copy(
+                                            text = "👑",
+                                            style = Typography.headlineSmall.copy(
                                                 color = Color.White,
                                                 fontWeight = FontWeight.Black
                                             )
@@ -155,11 +204,22 @@ fun HunterHudScreen(
                                     }
                                     Spacer(modifier = Modifier.width(12.dp))
                                     Column {
-                                        Text(
-                                            text = p.hunterName,
-                                            style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                            color = TextPrimary
-                                        )
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = p.hunterName,
+                                                style = Typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                                color = TextPrimary
+                                            )
+                                            Spacer(modifier = Modifier.width(6.dp))
+                                            Box(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(3.dp))
+                                                    .background(LevelUpGold.copy(alpha = 0.2f))
+                                                    .padding(horizontal = 4.dp, vertical = 1.dp)
+                                            ) {
+                                                Text("ADMIN", style = Typography.labelSmall.copy(fontSize = 9.sp, color = LevelUpGold))
+                                            }
+                                        }
                                         Text(
                                             text = "TITLE: ${p.title.uppercase()}",
                                             style = Typography.labelSmall,
@@ -664,6 +724,20 @@ fun HunterHudScreen(
                     }
                 }
             }
+        }
+
+        // Admin Command Center Modal
+        if (showAdminModal) {
+            AdminCommandCenterModal(
+                profile = profile,
+                onDismiss = { showAdminModal = false },
+                onActivateAdmin = { name, email ->
+                    viewModel.setAdminAuthority(name, email, true)
+                },
+                onInstantLevelUp = { levels ->
+                    viewModel.adminInstantLevelUp(levels)
+                }
+            )
         }
     }
 }
