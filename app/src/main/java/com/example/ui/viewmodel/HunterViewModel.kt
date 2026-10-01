@@ -139,6 +139,76 @@ class HunterViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun updateUserProfile(name: String, email: String, title: String, preferredTone: String) {
+        viewModelScope.launch {
+            val current = repository.getProfileOnce() ?: return@launch
+            val updated = current.copy(
+                hunterName = name.trim().ifBlank { "Practitioner" },
+                userEmail = email.trim().ifBlank { "user@example.com" },
+                title = title.trim().ifBlank { "Daily Discipline" },
+                preferredAiTone = preferredTone
+            )
+            repository.updateProfile(updated)
+            _systemEvents.emit(SystemEvent.ToastMessage("Profile saved for ${updated.hunterName}"))
+        }
+    }
+
+    fun addCustomHabit(
+        title: String,
+        description: String,
+        category: String,
+        targetLimit: Int,
+        unit: String,
+        requiresProof: Boolean,
+        proofType: String
+    ) {
+        viewModelScope.launch {
+            val newHabit = QuestEntity(
+                title = title.trim(),
+                description = description.trim(),
+                category = category,
+                statType = "HEALTH",
+                xpReward = 50,
+                statBonus = 2,
+                requiresCameraProof = requiresProof,
+                proofType = proofType,
+                dueDate = "DAILY",
+                isCountable = targetLimit > 1,
+                currentProgress = 0,
+                targetLimit = targetLimit.coerceAtLeast(1),
+                unit = unit.trim().ifBlank { "reps" }
+            )
+            repository.insertQuest(newHabit)
+            _systemEvents.emit(SystemEvent.ToastMessage("Added habit: $title"))
+        }
+    }
+
+    fun deleteHabit(quest: QuestEntity) {
+        viewModelScope.launch {
+            repository.deleteQuest(quest)
+            _systemEvents.emit(SystemEvent.ToastMessage("Removed habit '${quest.title}'"))
+        }
+    }
+
+    fun toggleHabitCompletion(quest: QuestEntity) {
+        viewModelScope.launch {
+            val newStatus = !quest.isCompleted
+            val updated = quest.copy(
+                isCompleted = newStatus,
+                completedAt = if (newStatus) System.currentTimeMillis() else null,
+                currentProgress = if (newStatus) quest.targetLimit else 0,
+                streakCount = if (newStatus) quest.streakCount + 1 else (quest.streakCount - 1).coerceAtLeast(0)
+            )
+            repository.updateQuest(updated)
+            if (newStatus) {
+                applyQuestCompletion(quest, quest.xpReward, quest.statType)
+                _systemEvents.emit(SystemEvent.ToastMessage("Completed: ${quest.title}"))
+            } else {
+                _systemEvents.emit(SystemEvent.ToastMessage("Reset: ${quest.title}"))
+            }
+        }
+    }
+
     fun adminCompleteAllDailyQuests() {
         viewModelScope.launch {
             val quests = repository.allQuests
@@ -405,7 +475,7 @@ class HunterViewModel(application: Application) : AndroidViewModel(application) 
             val aiResponse = aiService.getAiCoachResponse(
                 userMessage = text,
                 tone = tone,
-                hunterStats = statsSummary,
+                userStats = statsSummary,
                 isExcuseOrUrge = isExcuseOrUrge
             )
             _isAiLoading.value = false

@@ -90,7 +90,7 @@ fun QuestsScreen(
     val isVerifying by viewModel.isVerifyingProof.collectAsState()
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("ALL", "DAILY", "MAIN", "BOSS RAIDS", "COMPLETED")
+    val tabs = listOf("ALL", "DAILY HABITS", "CLEAN LIVING", "CHALLENGES", "COMPLETED")
 
     var showCreateQuestModal by remember { mutableStateOf(false) }
     var showAiQuestModal by remember { mutableStateOf(false) }
@@ -99,15 +99,13 @@ fun QuestsScreen(
 
     val filteredQuests = when (selectedTabIndex) {
         1 -> allQuests.filter { it.category == "DAILY" && !it.isCompleted }
-        2 -> allQuests.filter { it.category == "MAIN" && !it.isCompleted }
+        2 -> allQuests.filter { (it.category == "MAIN" || it.title.contains("Clean", ignoreCase = true) || it.title.contains("Tobacco", ignoreCase = true)) && !it.isCompleted }
         3 -> allQuests.filter { it.isBossRaid }
         4 -> allQuests.filter { it.isCompleted }
         else -> allQuests
     }
 
     Box(modifier = modifier.fillMaxSize().background(BackgroundVoid)) {
-        SystemAmbientParticles(particleCount = 18)
-
         Column(modifier = Modifier.fillMaxSize()) {
             // Screen Header & Action Buttons
             Column(
@@ -122,19 +120,19 @@ fun QuestsScreen(
                 ) {
                     Column {
                         Text(
-                            text = "SHADOW QUEST SYSTEM",
+                            text = "HABITS & PROTOCOLS",
                             style = Typography.headlineSmall,
                             color = NeonCyan
                         )
                         Text(
-                            text = "Execute protocols to level up attributes",
+                            text = "Quantifiable daily actions for health, focus, and clean living",
                             style = Typography.labelSmall,
                             color = TextSecondary
                         )
                     }
 
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        // AI Summon Quest Button
+                        // AI Generate Habit Button
                         IconButton(
                             onClick = { showAiQuestModal = true },
                             modifier = Modifier
@@ -145,12 +143,12 @@ fun QuestsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.AutoAwesome,
-                                contentDescription = "AI Generate Quest",
+                                contentDescription = "AI Generate Habit",
                                 tint = LevelUpGold
                             )
                         }
 
-                        // Manual Quest Add Button
+                        // Manual Habit Add Button
                         IconButton(
                             onClick = { showCreateQuestModal = true },
                             modifier = Modifier
@@ -161,7 +159,7 @@ fun QuestsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Add Quest",
+                                contentDescription = "Add Habit",
                                 tint = NeonCyan
                             )
                         }

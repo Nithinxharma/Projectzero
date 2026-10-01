@@ -92,15 +92,13 @@ fun AiCoachScreen(
     }
 
     val tones = listOf(
-        Pair("SYSTEM", "Cold System AI"),
-        Pair("IRON_COACH", "Iron Coach (No Excuses)"),
-        Pair("WISE_MENTOR", "Wise Grandmaster")
+        Pair("PERFORMANCE", "Performance Coach"),
+        Pair("SCIENTIFIC", "Neuroscience Logic"),
+        Pair("EMPATHETIC", "Mindful & Supportive")
     )
-    val currentTone = profile?.preferredAiTone ?: "SYSTEM"
+    val currentTone = profile?.preferredAiTone ?: "PERFORMANCE"
 
     Box(modifier = modifier.fillMaxSize().background(BackgroundVoid)) {
-        SystemAmbientParticles(particleCount = 18)
-
         Column(modifier = Modifier.fillMaxSize()) {
             // Header & Tab Selector
             Column(
@@ -115,12 +113,12 @@ fun AiCoachScreen(
                 ) {
                     Column {
                         Text(
-                            text = "AI SYSTEM LIFE COACH",
+                            text = "HABIT & PERFORMANCE COACH",
                             style = Typography.headlineSmall,
                             color = NeonCyan
                         )
                         Text(
-                            text = "Powered by Gemini • Accountability & Diagnostics",
+                            text = "Evidence-based accountability & daily bio-journal",
                             style = Typography.labelSmall,
                             color = TextSecondary
                         )
@@ -141,7 +139,7 @@ fun AiCoachScreen(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "MENTOR",
+                                text = "COACH",
                                 style = Typography.labelSmall,
                                 color = if (activeTab == 0) BackgroundVoid else TextSecondary
                             )
@@ -154,7 +152,7 @@ fun AiCoachScreen(
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
-                                text = "LOG & REPORT",
+                                text = "BIO-JOURNAL",
                                 style = Typography.labelSmall,
                                 color = if (activeTab == 1) BackgroundVoid else TextSecondary
                             )

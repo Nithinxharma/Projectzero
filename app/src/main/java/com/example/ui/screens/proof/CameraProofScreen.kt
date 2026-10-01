@@ -111,8 +111,6 @@ fun CameraProofScreen(
     var currentTab by remember { mutableStateOf(0) } // 0 = Live Scanner, 1 = Verified History
 
     Box(modifier = modifier.fillMaxSize().background(BackgroundVoid)) {
-        SystemAmbientParticles(particleCount = 20)
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -128,12 +126,12 @@ fun CameraProofScreen(
                 ) {
                     Column {
                         Text(
-                            text = "AI VISION PROOF LAB",
+                            text = "PHOTO PROOF VERIFICATION",
                             style = Typography.headlineSmall,
                             color = NeonCyan
                         )
                         Text(
-                            text = "Zero manual cheating. Prove daily execution.",
+                            text = "Real visual accountability for your daily habits & training",
                             style = Typography.labelSmall,
                             color = TextSecondary
                         )

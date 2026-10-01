@@ -1,6 +1,6 @@
 {
   "name": "Project Zero",
-  "description": "Solo Leveling AI Life System: RPG habit progression, camera proof verification, AI life coach, and rank ascension.",
+  "description": "Realistic self-mastery and daily discipline tracker: physical fitness, cognitive focus, clean habit streaks, camera proof verification, and evidence-based AI coaching.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

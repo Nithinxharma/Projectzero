@@ -1,12 +1,6 @@
 package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,17 +17,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Timer
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.filled.SelfImprovement
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -45,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -55,11 +45,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.entity.QuestEntity
 import com.example.ui.theme.AlertCrimson
+import com.example.ui.theme.BackgroundSurface
 import com.example.ui.theme.BackgroundVoid
 import com.example.ui.theme.HealthGreen
 import com.example.ui.theme.LevelUpGold
 import com.example.ui.theme.MonarchPurple
 import com.example.ui.theme.NeonCyan
+import com.example.ui.theme.ShadowIndigo
 import com.example.ui.theme.TextCyan
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
@@ -73,53 +65,33 @@ fun SoloLevelingSystemQuestWindow(
     onVerifyProof: (QuestEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "hologram_pulse")
-    val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.5f,
-        targetValue = 0.95f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1800, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glow_alpha"
-    )
-
-    val allDailyCompleted = quests.isNotEmpty() && quests.all { it.isCompleted }
+    val completedCount = quests.count { it.isCompleted }
+    val totalCount = quests.size
+    val allDailyCompleted = totalCount > 0 && completedCount == totalCount
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(12.dp, RoundedCornerShape(12.dp), spotColor = NeonCyan.copy(alpha = 0.35f))
             .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xE6080E1C))
+            .background(Color(0xFF141926))
             .border(
-                width = 2.dp,
-                brush = Brush.verticalGradient(
-                    listOf(
-                        NeonCyan.copy(alpha = glowAlpha),
-                        MonarchPurple.copy(alpha = 0.7f),
-                        NeonCyan.copy(alpha = glowAlpha * 0.8f)
-                    )
-                ),
+                width = 1.dp,
+                color = if (allDailyCompleted) HealthGreen.copy(alpha = 0.6f) else ShadowIndigo.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(12.dp)
             )
             .testTag("solo_leveling_quest_window")
     ) {
-        // Holographic System Window Header
+        // Real-Life Protocol Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(Color(0xFF003853), Color(0xFF1E084D), Color(0xFF003853))
-                    )
-                )
+                .background(Color(0xFF1A2234))
                 .border(
                     width = 1.dp,
-                    color = NeonCyan.copy(alpha = 0.6f),
+                    color = ShadowIndigo.copy(alpha = 0.4f),
                     shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
                 )
-                .padding(horizontal = 14.dp, vertical = 10.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -127,18 +99,18 @@ fun SoloLevelingSystemQuestWindow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(10.dp)
-                            .clip(CircleShape)
-                            .background(if (allDailyCompleted) HealthGreen else NeonCyan)
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.TrendingUp,
+                        contentDescription = null,
+                        tint = if (allDailyCompleted) HealthGreen else NeonCyan,
+                        modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "QUEST INFO : DAILY QUEST",
+                        text = "TODAY'S DISCIPLINE PROTOCOL",
                         style = Typography.labelLarge.copy(
-                            fontWeight = FontWeight.Black,
-                            letterSpacing = 1.2.sp
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.8.sp
                         ),
                         color = Color.White
                     )
@@ -146,15 +118,15 @@ fun SoloLevelingSystemQuestWindow(
 
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(if (allDailyCompleted) HealthGreen.copy(alpha = 0.25f) else AlertCrimson.copy(alpha = 0.25f))
-                        .border(1.dp, if (allDailyCompleted) HealthGreen else AlertCrimson, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(if (allDailyCompleted) HealthGreen.copy(alpha = 0.2f) else ShadowIndigo.copy(alpha = 0.25f))
+                        .border(1.dp, if (allDailyCompleted) HealthGreen else ShadowIndigo, RoundedCornerShape(6.dp))
+                        .padding(horizontal = 8.dp, vertical = 3.dp)
                 ) {
                     Text(
-                        text = if (allDailyCompleted) "CLEARED" else "INCOMPLETE",
+                        text = "$completedCount / $totalCount DONE",
                         style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                        color = if (allDailyCompleted) HealthGreen else AlertCrimson
+                        color = if (allDailyCompleted) HealthGreen else Color(0xFF93C5FD)
                     )
                 }
             }
@@ -164,29 +136,28 @@ fun SoloLevelingSystemQuestWindow(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(16.dp)
         ) {
             Text(
-                text = "【 DAILY QUEST : PREPARATION TO BECOME STRONG 】",
+                text = "Physical Fitness & Cognitive Habits",
                 style = Typography.titleMedium.copy(
-                    fontWeight = FontWeight.Black,
-                    fontSize = 15.sp,
-                    letterSpacing = 0.5.sp
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
                 ),
-                color = TextCyan
+                color = TextPrimary
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Goals must be executed daily from Zero to Target Limit. Increment reps as you perform each set.",
+                text = "Execute your daily target volume. Tap quick increment buttons (+5, +10, etc.) as you complete each set.",
                 style = Typography.bodyMedium.copy(fontSize = 12.sp),
                 color = TextSecondary
             )
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // Exercise Goals 0 to N Matrix List
+            // Exercise Goals Matrix List
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 quests.forEach { quest ->
                     CountableExerciseRow(
@@ -198,74 +169,37 @@ fun SoloLevelingSystemQuestWindow(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Warning Penalty Box
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0x33FF2A6D))
-                    .border(1.dp, AlertCrimson.copy(alpha = 0.6f), RoundedCornerShape(8.dp))
-                    .padding(12.dp)
-            ) {
-                Row(verticalAlignment = Alignment.Top) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = null,
-                        tint = AlertCrimson,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Column {
-                        Text(
-                            text = "SYSTEM WARNING : PENALTY QUEST",
-                            style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = AlertCrimson
-                        )
-                        Text(
-                            text = "Failure to complete daily goals before midnight will transfer you into the Penalty Survival Zone for 4 Hours.",
-                            style = Typography.bodyMedium.copy(fontSize = 11.sp),
-                            color = Color(0xFFFFD0D8)
-                        )
-                    }
-                }
-            }
-
             Spacer(modifier = Modifier.height(14.dp))
 
-            // System Rewards Box
+            // Clean Living & Accountability Callout
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color(0x269D4EDD))
-                    .border(1.dp, MonarchPurple.copy(alpha = 0.7f), RoundedCornerShape(8.dp))
+                    .background(Color(0xFF161E2E))
+                    .border(1.dp, ShadowIndigo.copy(alpha = 0.35f), RoundedCornerShape(8.dp))
                     .padding(12.dp)
             ) {
-                Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.SelfImprovement,
+                        contentDescription = null,
+                        tint = NeonCyan,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
                         Text(
-                            text = "★ QUEST CLEAR REWARDS",
+                            text = "ATOMIC HABIT PRINCIPLE",
                             style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = LevelUpGold
-                        )
-                        Text(
-                            text = "+300 XP • +3 STAT PTS",
-                            style = Typography.labelSmall,
                             color = NeonCyan
                         )
+                        Text(
+                            text = "Consistency beats intensity. Small daily actions compound into life-changing physical and cognitive results.",
+                            style = Typography.bodyMedium.copy(fontSize = 11.sp),
+                            color = TextSecondary
+                        )
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "1. Status Recovery (Restores 100% HP & MP)\n2. +3 Free Attribute Distribution Points\n3. Blessed Random Loot Box",
-                        style = Typography.bodyMedium.copy(fontSize = 11.sp, lineHeight = 16.sp),
-                        color = Color(0xFFE2E8F0)
-                    )
                 }
             }
         }
@@ -290,14 +224,14 @@ fun CountableExerciseRow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(if (isComplete) Color(0x3300E676) else Color(0x330E1428))
+            .background(if (isComplete) Color(0x1F10B981) else Color(0xFF1B2232))
             .border(
                 width = 1.dp,
-                color = if (isComplete) HealthGreen.copy(alpha = 0.6f) else Color(0x3300F0FF),
+                color = if (isComplete) HealthGreen.copy(alpha = 0.5f) else Color(0x3338BDF8),
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable { expandedControls = !expandedControls }
-            .padding(10.dp)
+            .padding(12.dp)
             .testTag("exercise_row_${quest.id}")
     ) {
         Row(
@@ -310,8 +244,8 @@ fun CountableExerciseRow(
                     modifier = Modifier
                         .size(24.dp)
                         .clip(CircleShape)
-                        .background(if (isComplete) HealthGreen.copy(alpha = 0.2f) else Color(0x2200F0FF))
-                        .border(1.dp, if (isComplete) HealthGreen else NeonCyan, CircleShape),
+                        .background(if (isComplete) HealthGreen.copy(alpha = 0.2f) else Color(0x2238BDF8))
+                        .border(1.dp, if (isComplete) HealthGreen else ShadowIndigo, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     if (isComplete) {
@@ -323,9 +257,9 @@ fun CountableExerciseRow(
                         )
                     } else {
                         Text(
-                            text = "-",
+                            text = "•",
                             style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            color = NeonCyan
+                            color = Color(0xFF38BDF8)
                         )
                     }
                 }
@@ -339,9 +273,9 @@ fun CountableExerciseRow(
                         color = if (isComplete) HealthGreen else TextPrimary
                     )
                     Text(
-                        text = if (isComplete) "COMPLETED" else "INCOMPLETE",
-                        style = Typography.labelSmall.copy(fontSize = 10.sp),
-                        color = if (isComplete) HealthGreen else Color(0xFFEF4444)
+                        text = if (isComplete) "Target Reached" else "${target - current} ${quest.unit} remaining",
+                        style = Typography.labelSmall.copy(fontSize = 11.sp),
+                        color = if (isComplete) HealthGreen else TextSecondary
                     )
                 }
             }
@@ -351,18 +285,18 @@ fun CountableExerciseRow(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFF090D1C))
-                        .border(1.dp, if (isComplete) HealthGreen else NeonCyan, RoundedCornerShape(6.dp))
+                        .background(Color(0xFF0F1420))
+                        .border(1.dp, if (isComplete) HealthGreen.copy(alpha = 0.4f) else ShadowIndigo.copy(alpha = 0.4f), RoundedCornerShape(6.dp))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "[$current / $target ${quest.unit}]",
+                        text = "$current / $target ${quest.unit}",
                         style = Typography.labelLarge.copy(
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             fontFamily = FontFamily.Monospace,
                             fontWeight = FontWeight.Bold
                         ),
-                        color = if (isComplete) HealthGreen else NeonCyan
+                        color = if (isComplete) HealthGreen else Color(0xFF60A5FA)
                     )
                 }
 
@@ -380,7 +314,7 @@ fun CountableExerciseRow(
             }
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Progress line
         Box(
@@ -388,7 +322,7 @@ fun CountableExerciseRow(
                 .fillMaxWidth()
                 .height(6.dp)
                 .clip(RoundedCornerShape(3.dp))
-                .background(Color(0xFF090D1C))
+                .background(Color(0xFF0F1420))
         ) {
             Box(
                 modifier = Modifier
@@ -396,15 +330,15 @@ fun CountableExerciseRow(
                     .height(6.dp)
                     .clip(RoundedCornerShape(3.dp))
                     .background(
-                        if (isComplete) Brush.horizontalGradient(listOf(HealthGreen, Color(0xFF00B0FF)))
-                        else Brush.horizontalGradient(listOf(NeonCyan, MonarchPurple))
+                        if (isComplete) Brush.horizontalGradient(listOf(HealthGreen, Color(0xFF059669)))
+                        else Brush.horizontalGradient(listOf(Color(0xFF38BDF8), ShadowIndigo))
                     )
             )
         }
 
         // Expanded Increment Rep Buttons
         AnimatedVisibility(visible = expandedControls || !isComplete) {
-            Column(modifier = Modifier.padding(top = 8.dp)) {
+            Column(modifier = Modifier.padding(top = 10.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -414,6 +348,7 @@ fun CountableExerciseRow(
                         "km" -> listOf(1, 2, 5)
                         "ml" -> listOf(250, 500, 1000)
                         "mins" -> listOf(15, 30, 45)
+                        "pages" -> listOf(5, 10, 20)
                         else -> listOf(5, 10, 25, 50)
                     }
 
@@ -422,16 +357,16 @@ fun CountableExerciseRow(
                             modifier = Modifier
                                 .weight(1f)
                                 .clip(RoundedCornerShape(6.dp))
-                                .background(Color(0x3300F0FF))
-                                .border(1.dp, NeonCyan.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
-                                .clickable { onIncrement(step) }
-                                .padding(vertical = 6.dp),
+                                .background(Color(0xFF1E283D))
+                                .border(1.dp, ShadowIndigo.copy(alpha = 0.4f), RoundedCornerShape(6.dp))
+                            .clickable { onIncrement(step) }
+                            .padding(vertical = 6.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "+$step",
                                 style = Typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                                color = NeonCyan
+                                color = Color(0xFF93C5FD)
                             )
                         }
                     }
@@ -440,8 +375,8 @@ fun CountableExerciseRow(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(6.dp))
-                                .background(MonarchPurple.copy(alpha = 0.4f))
-                                .border(1.dp, MonarchPurple, RoundedCornerShape(6.dp))
+                                .background(LevelUpGold.copy(alpha = 0.15f))
+                                .border(1.dp, LevelUpGold.copy(alpha = 0.5f), RoundedCornerShape(6.dp))
                                 .clickable { onProof() }
                                 .padding(horizontal = 8.dp, vertical = 6.dp),
                             contentAlignment = Alignment.Center
@@ -454,7 +389,7 @@ fun CountableExerciseRow(
                                     modifier = Modifier.size(14.dp)
                                 )
                                 Spacer(modifier = Modifier.width(3.dp))
-                                Text("PROOF", style = Typography.labelSmall.copy(fontSize = 9.sp), color = LevelUpGold)
+                                Text("PHOTO", style = Typography.labelSmall.copy(fontSize = 10.sp, fontWeight = FontWeight.Bold), color = LevelUpGold)
                             }
                         }
                     }

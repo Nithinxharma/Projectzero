@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.WorkspacePremium
@@ -78,6 +79,7 @@ import com.example.ui.theme.AlertCrimson
 import com.example.ui.theme.BackgroundSurface
 import com.example.ui.theme.BackgroundVoid
 import com.example.ui.theme.GlassBorder
+import com.example.ui.theme.HealthGreen
 import com.example.ui.theme.LevelUpGold
 import com.example.ui.theme.MonarchPurple
 import com.example.ui.theme.MyApplicationTheme
@@ -92,11 +94,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 enum class Screen(val title: String, val icon: ImageVector, val tag: String) {
-    HUD("HUD", Icons.Default.Dashboard, "nav_hud"),
-    QUESTS("QUESTS", Icons.AutoMirrored.Filled.FormatListBulleted, "nav_quests"),
-    PROOF("PROOF", Icons.Default.CameraAlt, "nav_proof"),
-    COACH("AI COACH", Icons.Default.Psychology, "nav_coach"),
-    ARSENAL("ARSENAL", Icons.Default.Shield, "nav_arsenal")
+    HUD("TODAY", Icons.Default.Dashboard, "nav_hud"),
+    QUESTS("HABITS", Icons.AutoMirrored.Filled.FormatListBulleted, "nav_quests"),
+    PROOF("VERIFY", Icons.Default.CameraAlt, "nav_proof"),
+    COACH("COACH", Icons.Default.Psychology, "nav_coach"),
+    ARSENAL("PROFILE", Icons.Default.Person, "nav_arsenal")
 }
 
 class MainActivity : ComponentActivity() {
@@ -240,15 +242,15 @@ fun ProjectZeroApp() {
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Text(
-                                text = "【 SYSTEM LEVEL UP 】",
-                                style = Typography.headlineMedium.copy(fontWeight = FontWeight.Black),
+                                text = "CONSISTENCY STREAK EXTENDED",
+                                style = Typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                                 color = LevelUpGold
                             )
 
                             Spacer(modifier = Modifier.height(6.dp))
 
                             Text(
-                                text = "YOU HAVE ASCENDED TO LEVEL ${evt.newLevel}",
+                                text = "DAY ${evt.newLevel} ADHERENCE ACHIEVED",
                                 style = Typography.titleLarge,
                                 color = Color.White
                             )
@@ -260,7 +262,7 @@ fun ProjectZeroApp() {
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Text(
-                                text = "Attributes enhanced! +1 Skill Point awarded to invest in the Skill Tree.",
+                                text = "Outstanding adherence! Your daily actions compound into lasting neuroplastic habit formation.",
                                 style = Typography.bodyMedium,
                                 color = Color(0xFFE2E8F0)
                             )
@@ -276,14 +278,14 @@ fun ProjectZeroApp() {
                                 shape = RoundedCornerShape(10.dp),
                                 modifier = Modifier.fillMaxWidth().testTag("level_up_dismiss_btn")
                             ) {
-                                Text("CLAIM ATTRIBUTE BOOSTS", style = Typography.labelLarge)
+                                Text("CONTINUE PROTOCOL", style = Typography.labelLarge)
                             }
                         }
                     }
                 }
             }
 
-            // BOSS DEFEATED VICTORY MODAL
+            // CHALLENGE COMPLETED VICTORY MODAL
             bossDefeatedEvent?.let { bossEvt ->
                 Box(
                     modifier = Modifier
@@ -293,13 +295,11 @@ fun ProjectZeroApp() {
                         .padding(24.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    SystemAmbientParticles(particleCount = 50)
-
                     GlassCard(
                         modifier = Modifier.fillMaxWidth(),
-                        borderColor = AlertCrimson,
+                        borderColor = HealthGreen,
                         borderWidth = 2.dp,
-                        backgroundColor = Color(0xFF220815)
+                        backgroundColor = Color(0xFF14241B)
                     ) {
                         Column(
                             modifier = Modifier.padding(24.dp),
@@ -313,9 +313,9 @@ fun ProjectZeroApp() {
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             Text(
-                                text = "BOSS CONQUERED!",
+                                text = "MILESTONE COMPLETED!",
                                 style = Typography.headlineMedium,
-                                color = AlertCrimson
+                                color = HealthGreen
                             )
                             Text(
                                 text = bossEvt.bossName.uppercase(),
@@ -324,12 +324,12 @@ fun ProjectZeroApp() {
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = "NEW TITLE UNLOCKED: \"${bossEvt.newTitle}\"",
+                                text = "BADGE UNLOCKED: \"${bossEvt.newTitle}\"",
                                 style = Typography.labelLarge,
                                 color = LevelUpGold
                             )
                             Text(
-                                text = "+${bossEvt.xpGained} XP Awarded",
+                                text = "+${bossEvt.xpGained} Discipline Points Earned",
                                 style = Typography.labelSmall,
                                 color = NeonCyan
                             )
@@ -337,12 +337,12 @@ fun ProjectZeroApp() {
                             Button(
                                 onClick = { bossDefeatedEvent = null },
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = AlertCrimson,
-                                    contentColor = Color.White
+                                    containerColor = HealthGreen,
+                                    contentColor = BackgroundVoid
                                 ),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("CLAIM VICTORY", style = Typography.labelLarge)
+                                Text("ACKNOWLEDGE MILESTONE", style = Typography.labelLarge)
                             }
                         }
                     }
