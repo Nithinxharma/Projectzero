@@ -247,7 +247,7 @@ fun HunterHudScreen(
                             }
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "${profile?.tobaccoFreeDays ?: 14} DAYS",
+                                text = "DAY ${profile?.tobaccoFreeDays ?: 0}",
                                 style = Typography.headlineSmall.copy(fontWeight = FontWeight.Black),
                                 color = TextPrimary
                             )
@@ -599,6 +599,9 @@ fun HunterHudScreen(
                 },
                 onInstantLevelUp = { levels ->
                     viewModel.adminInstantLevelUp(levels)
+                },
+                onResetToDayZero = {
+                    viewModel.resetToDayZero()
                 }
             )
         }

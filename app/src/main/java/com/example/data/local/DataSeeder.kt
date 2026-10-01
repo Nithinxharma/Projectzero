@@ -16,30 +16,30 @@ object DataSeeder {
             hunterName = "Abhiron",
             userEmail = "sabhiron5@gmail.com",
             title = "High-Performance Practitioner",
-            level = 14,
-            currentXp = 420,
-            maxXp = 600,
-            rank = "MASTERY",
-            accountTier = "PERFORMANCE_PRO",
+            level = 0,
+            currentXp = 0,
+            maxXp = 100,
+            rank = "INITIATE",
+            accountTier = "PRACTITIONER",
             isAdmin = true,
-            godModeEnabled = true,
+            godModeEnabled = false,
             hp = 100,
             maxHp = 100,
             mp = 100,
             maxMp = 100,
-            strength = 28,
-            discipline = 32,
-            intelligence = 30,
-            focus = 29,
-            charisma = 26,
-            health = 31,
-            availableSkillPoints = 6,
-            totalQuestsCompleted = 48,
-            currentStreak = 14,
-            highestStreak = 30,
-            consistencyScore = 96,
+            strength = 10,
+            discipline = 10,
+            intelligence = 10,
+            focus = 10,
+            charisma = 10,
+            health = 10,
+            availableSkillPoints = 0,
+            totalQuestsCompleted = 0,
+            currentStreak = 0,
+            highestStreak = 0,
+            consistencyScore = 0,
             burnoutRisk = "Low",
-            tobaccoFreeDays = 14,
+            tobaccoFreeDays = 0,
             soundEnabled = true,
             hapticsEnabled = true,
             preferredAiTone = "PERFORMANCE"
@@ -48,7 +48,7 @@ object DataSeeder {
 
     fun getInitialQuests(): List<QuestEntity> {
         return listOf(
-            // 1. Daily Physical Regimen
+            // 1. Daily Physical Regimen (Starts at 0)
             QuestEntity(
                 title = "Daily Push-ups (50 Reps)",
                 description = "Upper body strength, shoulder stability, and core engagement.",
@@ -61,9 +61,11 @@ object DataSeeder {
                 proofInstructions = "Photo of workout space, pushup form, or training gear",
                 dueDate = "BEFORE MIDNIGHT",
                 isCountable = true,
-                currentProgress = 20,
+                currentProgress = 0,
                 targetLimit = 50,
-                unit = "reps"
+                unit = "reps",
+                isCompleted = false,
+                streakCount = 0
             ),
             QuestEntity(
                 title = "Bodyweight Squats (75 Reps)",
@@ -75,9 +77,11 @@ object DataSeeder {
                 requiresCameraProof = false,
                 dueDate = "BEFORE MIDNIGHT",
                 isCountable = true,
-                currentProgress = 30,
+                currentProgress = 0,
                 targetLimit = 75,
-                unit = "reps"
+                unit = "reps",
+                isCompleted = false,
+                streakCount = 0
             ),
             QuestEntity(
                 title = "Core Planks & Ab Crunches (50 Reps/Sec)",
@@ -91,7 +95,9 @@ object DataSeeder {
                 isCountable = true,
                 currentProgress = 0,
                 targetLimit = 50,
-                unit = "reps"
+                unit = "reps",
+                isCompleted = false,
+                streakCount = 0
             ),
             QuestEntity(
                 title = "Cardio Run / 8,000 Brisk Steps",
@@ -105,12 +111,14 @@ object DataSeeder {
                 proofInstructions = "Screenshot of fitness app step counter or outdoor route",
                 dueDate = "BEFORE MIDNIGHT",
                 isCountable = true,
-                currentProgress = 3,
+                currentProgress = 0,
                 targetLimit = 5,
-                unit = "km"
+                unit = "km",
+                isCompleted = false,
+                streakCount = 0
             ),
 
-            // 2. Cognitive & Deep Work Habits
+            // 2. Cognitive & Deep Work Habits (Starts at 0)
             QuestEntity(
                 title = "Deep Work Block (60 Mins)",
                 description = "Uninterrupted, high-leverage focus on core professional or creative work.",
@@ -123,9 +131,11 @@ object DataSeeder {
                 proofInstructions = "Photo of clean workstation, IDE code editor, or project notes",
                 dueDate = "TODAY",
                 isCountable = true,
-                currentProgress = 45,
+                currentProgress = 0,
                 targetLimit = 60,
-                unit = "mins"
+                unit = "mins",
+                isCompleted = false,
+                streakCount = 0
             ),
             QuestEntity(
                 title = "Mindful Reading (20 Pages)",
@@ -139,12 +149,14 @@ object DataSeeder {
                 proofInstructions = "Photo of physical book page or e-reader",
                 dueDate = "TODAY",
                 isCountable = true,
-                currentProgress = 10,
+                currentProgress = 0,
                 targetLimit = 20,
-                unit = "pages"
+                unit = "pages",
+                isCompleted = false,
+                streakCount = 0
             ),
 
-            // 3. Health & Clean Living Protocol
+            // 3. Health & Clean Living Protocol (Starts at 0)
             QuestEntity(
                 title = "Optimal Hydration (3,000 ml)",
                 description = "Cellular hydration for peak cognitive function and metabolic energy.",
@@ -157,9 +169,11 @@ object DataSeeder {
                 proofInstructions = "Photo of filled water bottle or glass",
                 dueDate = "TODAY",
                 isCountable = true,
-                currentProgress = 1500,
+                currentProgress = 0,
                 targetLimit = 3000,
-                unit = "ml"
+                unit = "ml",
+                isCompleted = false,
+                streakCount = 0
             ),
             QuestEntity(
                 title = "Clean Living: Tobacco & Nicotine Free Day",
@@ -170,11 +184,11 @@ object DataSeeder {
                 statBonus = 5,
                 requiresCameraProof = false,
                 dueDate = "DAILY PROTOCOL",
-                isCompleted = true,
-                streakCount = 14
+                isCompleted = false,
+                streakCount = 0
             ),
 
-            // 4. Real-World Challenges & Milestones
+            // 4. Real-World Challenges & Milestones (Starts at 0)
             QuestEntity(
                 title = "30-Day Zero Tobacco / Clean Habit Milestone",
                 description = "Achieve 30 consecutive clean days of neuro-chemical dopamine reset.",
@@ -185,10 +199,11 @@ object DataSeeder {
                 requiresCameraProof = false,
                 isBossRaid = true,
                 bossName = "30-Day Clean Habit Milestone",
-                bossHp = 16,
+                bossHp = 0,
                 maxBossHp = 30,
                 bossRewardTitle = "Clean Living Master",
-                bossDamagePerTask = 1
+                bossDamagePerTask = 1,
+                isCompleted = false
             ),
             QuestEntity(
                 title = "100km Monthly Running Challenge",
@@ -200,10 +215,11 @@ object DataSeeder {
                 requiresCameraProof = false,
                 isBossRaid = true,
                 bossName = "100km Monthly Running Challenge",
-                bossHp = 58,
+                bossHp = 0,
                 maxBossHp = 100,
                 bossRewardTitle = "Endurance Champion",
-                bossDamagePerTask = 5
+                bossDamagePerTask = 5,
+                isCompleted = false
             )
         )
     }
@@ -228,9 +244,10 @@ object DataSeeder {
                 category = "WILLPOWER",
                 tier = 2,
                 costPoints = 2,
-                isUnlocked = true,
+                isUnlocked = false,
                 iconName = "sword",
-                statBoostDescription = "+8 Habit Adherence"
+                statBoostDescription = "+8 Habit Adherence",
+                prerequisiteId = "will_1"
             ),
             SkillTreeNodeEntity(
                 id = "will_3",
@@ -284,7 +301,7 @@ object DataSeeder {
     fun getInitialChatMessage(): ChatMessageEntity {
         return ChatMessageEntity(
             sender = "SYSTEM_AI",
-            message = "Welcome to your performance protocol. Your streak is at 14 clean days. I am your evidence-based habit and performance coach. Today we focus on hydration, your 50 pushups, and unbroken focus. How is your energy level right now?",
+            message = "Welcome to Day 0. Every great journey starts from Ground Zero. I am your evidence-based habit and performance coach. Today is your foundation: execute your baseline pushups, hydrate properly, and keep your clean streak intact starting from day one. How are you feeling right now?",
             tone = "PERFORMANCE",
             isExcuseAnalysis = false,
             timestamp = System.currentTimeMillis()
@@ -295,18 +312,18 @@ object DataSeeder {
         val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         return DailyLifeLogEntity(
             date = todayStr,
-            sleepHours = 7.5f,
-            exerciseMinutes = 30,
-            studyMinutes = 60,
-            workMinutes = 360,
-            screenTimeMinutes = 120,
-            tobaccoUrgesResisted = 2,
+            sleepHours = 7.0f,
+            exerciseMinutes = 0,
+            studyMinutes = 0,
+            workMinutes = 0,
+            screenTimeMinutes = 0,
+            tobaccoUrgesResisted = 0,
             tobaccoLapses = 0,
-            moodRating = 4,
-            energyRating = 4,
-            waterMl = 2500,
-            stepCount = 8000,
-            note = "Completed morning run and deep work session without distractions. Felt calm and focused."
+            moodRating = 3,
+            energyRating = 3,
+            waterMl = 0,
+            stepCount = 0,
+            note = "Day 0: Starting fresh on the discipline protocol."
         )
     }
 }

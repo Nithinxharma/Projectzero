@@ -321,6 +321,27 @@ fun SkillTreeScreen(
                                     ) {
                                         Text("SAVE CHANGES", style = Typography.labelLarge.copy(fontWeight = FontWeight.Bold))
                                     }
+
+                                    Spacer(modifier = Modifier.height(4.dp))
+
+                                    Button(
+                                        onClick = {
+                                            viewModel.resetToDayZero()
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Color(0xFF1E2638),
+                                            contentColor = Color(0xFFEF4444)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .border(1.dp, Color(0x66EF4444), RoundedCornerShape(8.dp))
+                                    ) {
+                                        Text(
+                                            text = "RESET TO DAY 0 (START FROM ZERO)",
+                                            style = Typography.labelMedium.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEF4444))
+                                        )
+                                    }
                                 }
                             }
                         }

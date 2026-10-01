@@ -83,6 +83,56 @@ class HunterViewModel(application: Application) : AndroidViewModel(application) 
     private val _isVerifyingProof = MutableStateFlow(false)
     val isVerifyingProof: StateFlow<Boolean> = _isVerifyingProof.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            val p = repository.getProfileOnce()
+            if (p != null && (p.currentStreak == 14 && p.totalQuestsCompleted == 48)) {
+                // Auto-reset legacy pre-seeded database to Day 0
+                resetToDayZero()
+            }
+        }
+    }
+
+    fun resetToDayZero() {
+        viewModelScope.launch {
+            val current = repository.getProfileOnce() ?: return@launch
+            val resetProfile = current.copy(
+                level = 0,
+                currentXp = 0,
+                maxXp = 100,
+                rank = "INITIATE",
+                currentStreak = 0,
+                highestStreak = 0,
+                consistencyScore = 0,
+                tobaccoFreeDays = 0,
+                totalQuestsCompleted = 0,
+                strength = 10,
+                discipline = 10,
+                intelligence = 10,
+                focus = 10,
+                charisma = 10,
+                health = 10,
+                availableSkillPoints = 0
+            )
+            repository.updateProfile(resetProfile)
+
+            // Reset all quests and challenges to 0
+            allQuests.value.forEach { q ->
+                repository.updateQuest(
+                    q.copy(
+                        currentProgress = 0,
+                        isCompleted = false,
+                        streakCount = 0,
+                        completedAt = null,
+                        bossHp = 0
+                    )
+                )
+            }
+
+            _systemEvents.emit(SystemEvent.ToastMessage("Day 0: Clean slate initiated! Ground Zero."))
+        }
+    }
+
     fun setAdminAuthority(name: String, email: String, isGodMode: Boolean) {
         viewModelScope.launch {
             val current = repository.getProfileOnce() ?: return@launch

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ManageAccounts
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.Button
@@ -66,7 +67,8 @@ fun AdminCommandCenterModal(
     profile: HunterProfileEntity?,
     onDismiss: () -> Unit,
     onActivateAdmin: (String, String) -> Unit,
-    onInstantLevelUp: (Int) -> Unit
+    onInstantLevelUp: (Int) -> Unit,
+    onResetToDayZero: () -> Unit = {}
 ) {
     var userName by remember { mutableStateOf(profile?.hunterName ?: "Abhiron") }
     var userEmail by remember { mutableStateOf(profile?.userEmail ?: "sabhiron5@gmail.com") }
@@ -260,6 +262,38 @@ fun AdminCommandCenterModal(
                         text = "SAVE PROFILE CHANGES",
                         style = Typography.labelLarge.copy(fontWeight = FontWeight.Bold)
                     )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Reset to Day 0 (Fresh Start) Button
+                Button(
+                    onClick = {
+                        onResetToDayZero()
+                        onDismiss()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF1E2638),
+                        contentColor = Color(0xFFEF4444)
+                    ),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color(0x66EF4444), RoundedCornerShape(10.dp))
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.RestartAlt,
+                            contentDescription = null,
+                            tint = Color(0xFFEF4444),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "RESET TO DAY 0 (START FROM ZERO)",
+                            style = Typography.labelMedium.copy(fontWeight = FontWeight.Bold, color = Color(0xFFEF4444))
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
