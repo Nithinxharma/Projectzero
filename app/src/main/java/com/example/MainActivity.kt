@@ -33,9 +33,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.WorkspacePremium
@@ -93,7 +93,7 @@ import kotlinx.coroutines.launch
 
 enum class Screen(val title: String, val icon: ImageVector, val tag: String) {
     HUD("HUD", Icons.Default.Dashboard, "nav_hud"),
-    QUESTS("QUESTS", Icons.Default.FormatListBulleted, "nav_quests"),
+    QUESTS("QUESTS", Icons.AutoMirrored.Filled.FormatListBulleted, "nav_quests"),
     PROOF("PROOF", Icons.Default.CameraAlt, "nav_proof"),
     COACH("AI COACH", Icons.Default.Psychology, "nav_coach"),
     ARSENAL("ARSENAL", Icons.Default.Shield, "nav_arsenal")
