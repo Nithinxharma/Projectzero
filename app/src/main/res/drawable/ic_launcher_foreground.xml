@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Outer Hex Shield Aura -->
+    <path
+        android:pathData="M54,20 L80,35 L80,68 L54,88 L28,68 L28,35 Z"
+        android:strokeWidth="2.5"
+        android:strokeColor="#8A2BE2" />
+        
+    <!-- Inner Hex Diamond -->
+    <path
+        android:pathData="M54,26 L74,38 L74,65 L54,82 L34,65 L34,38 Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="#00F0FF" />
+
+    <!-- Project Zero '0' / Hunter Core -->
+    <path
+        android:pathData="M54,34 C44,34 39,43 39,54 C39,65 44,74 54,74 C64,74 69,65 69,54 C69,43 64,34 54,34 Z M54,40 C60,40 63,46 63,54 C63,62 60,68 54,68 C48,68 45,62 45,54 C45,46 48,40 54,40 Z"
+        android:fillColor="#00F0FF" />
+
+    <!-- Monarch Energy Blade Center Slash -->
+    <path
+        android:pathData="M66,32 L42,76"
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFF" />
+
+    <!-- Ascend Flare Point -->
+    <path
+        android:pathData="M54,47 L56,54 L63,54 L57,58 L59,65 L54,61 L49,65 L51,58 L45,54 L52,54 Z"
+        android:fillColor="#FFD700" />
+</vector>
